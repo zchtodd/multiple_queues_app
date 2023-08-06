@@ -1,0 +1,21 @@
+- hosts: production
+  become: yes
+  vars:
+    celery_workers:
+      - name: fibonacci
+  tasks:
+    - name: Include redis role
+      import_tasks: roles/redis/tasks/main.yml
+      async: 7200
+      poll: 0
+      register: redis_role_task
+      tags:
+        - redis
+
+    - name: Include celery role
+      import_tasks: roles/celery/tasks/main.yml
+      async: 7200
+      poll: 0
+      register: celery_role_task
+      tags:
+        - celery

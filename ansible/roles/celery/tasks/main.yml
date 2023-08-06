@@ -1,0 +1,48 @@
+- name: Create Celery logs directories
+  ansible.builtin.file:
+    path: "/var/log/celery/{{ item.name }}"
+    state: directory
+  loop: "{{ celery_workers }}"
+
+- name: Create Celery Beat Systemd service file
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/roles/celery/templates/celery-beat.service.j2"
+    dest: "/etc/systemd/system/celery-beat.service"
+    mode: "0644"
+
+- name: Create Celery Systemd service files
+  ansible.builtin.template:
+    src: "{{ playbook_dir }}/roles/celery/templates/celery.service.j2"
+    dest: "/etc/systemd/system/celery-{{ item.name }}.service"
+    mode: "0644"
+  loop: "{{ celery_workers }}"
+
+- name: Reload Systemd configuration
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable and start Celery services
+  ansible.builtin.systemd:
+    name: "celery-{{ item.name }}"
+    state: started
+    enabled: yes
+  loop: "{{ celery_workers }}"
+
+- name: Enable and start Celery beat
+  ansible.builtin.systemd:
+    name: "celery-beat"
+    state: started
+    enabled: yes
+
+- name: Restart Celery service
+  ansible.builtin.systemd:
+    name: "celery-{{ item.name }}"
+    state: restarted
+    daemon_reload: yes
+  loop: "{{ celery_workers }}"
+
+- name: Restart Celery beat
+  ansible.builtin.systemd:
+    name: "celery-beat"
+    state: restarted
+    daemon_reload: yes

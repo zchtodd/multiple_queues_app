@@ -1,0 +1,23 @@
+[Unit]
+Description=Celery Beat
+After=network.target
+
+[Service]
+Environment="REDIS_HOST=localhost"
+Environment="REDIS_PASSWORD={{ redis_password }}"
+Environment="REDIS_PORT=6379"
+Environment="REDIS_DB=0"
+Environment="PYTHONUNBUFFERED=1"
+Type=simple
+User=root
+Group=root
+WorkingDirectory={{ app_path }}
+ExecStart={{ app_path }}/.venv/bin/celery -A multiple_queues_app beat --loglevel=info
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=celery-beat
+
+[Install]
+WantedBy=multi-user.target

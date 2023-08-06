@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update_celery:
+    runs-on: ubuntu-latest
+    environment: production
+    container: willhallonline/ansible:alpine
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up SSH key
+        working-directory: ansible
+        env:
+          ANSIBLE_SSH_PRIVATE_KEY: ${{ secrets.ANSIBLE_SSH_PRIVATE_KEY }}
+        run: |
+          echo "$ANSIBLE_SSH_PRIVATE_KEY" > id_rsa
+          chmod 600 id_rsa
+
+      - name: Run Ansible playbook
+        working-directory: ansible
+        run: ansible-playbook -i inventory.ini playbook.yml --tags "celery" --extra-vars "redis_password=${{ secrets.REDIS_PASSWORD }}"
