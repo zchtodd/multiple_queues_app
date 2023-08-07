@@ -13,7 +13,7 @@
       poll: 0
       register: app_role_task
       tags:
-        - web_app
+        - app
 
     - name: Include redis role
       import_tasks: roles/redis/tasks/main.yml
