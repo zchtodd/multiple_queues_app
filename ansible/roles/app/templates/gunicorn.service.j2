@@ -4,10 +4,7 @@ Requires=gunicorn-run-dir.service
 After=gunicorn-run-dir.service network.target
 
 [Service]
-Environment="REDIS_HOST=localhost"
-Environment="REDIS_PASSWORD={{ redis_password }}"
-Environment="REDIS_PORT=6379"
-Environment="REDIS_DB=0"
+Environment="CELERY_BROKER_URL=redis://:{{ redis_password }}@localhost:6379/0"
 Environment="PYTHONUNBUFFERED=1"
 User=root
 Group=root
