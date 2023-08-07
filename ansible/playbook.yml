@@ -4,6 +4,8 @@
     app_repo: git@github.com:zchtodd/multiple_queues_app.git
     app_path: /opt/multiple_queues_app
     venv_path: /opt/multiple_queues_app/.venv
+    gunicorn_config_path: /etc/systemd/system/gunicorn.service
+    run_dir_maker_config_path: /etc/systemd/system/gunicorn-run-dir.service
     celery_workers:
       - name: fibonacci
   tasks:
