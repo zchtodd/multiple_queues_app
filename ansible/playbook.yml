@@ -1,6 +1,7 @@
 - hosts: production
   become: yes
   vars:
+    app_path: /opt/multiple_queues_app
     celery_workers:
       - name: fibonacci
   tasks:
