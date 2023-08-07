@@ -10,14 +10,6 @@
     regexp: '^requirepass\s'
     line: "requirepass {{ redis_password }}"
     backup: yes
-  notify:
-    - restart redis
-
-- name: restart redis
-  ansible.builtin.systemd:
-    name: redis-server
-    state: restarted
-    daemon_reload: yes
 
 - name: Start and enable Redis service
   ansible.builtin.systemd:
