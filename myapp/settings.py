@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-pd&rllh__cpm8*$y(87b$p2)=y)!o1jkv64!6d#=(f%4^-ndck
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
 CELERY_IMPORTS = ("multiple_queues_app.tasks", )
