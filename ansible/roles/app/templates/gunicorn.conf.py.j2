@@ -1,0 +1,9 @@
+workers = 3
+bind = "unix:/run/gunicorn/gunicorn.sock"
+wsgi_app = "myapp.wsgi:application"
+
+# Logging settings
+accesslog = "/var/log/gunicorn/access.log"
+errorlog = "/var/log/gunicorn/error.log"
+loglevel = "info"
+capture_output = True

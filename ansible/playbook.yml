@@ -1,10 +1,20 @@
 - hosts: production
   become: yes
   vars:
+    app_repo: git@github.com:zchtodd/multiple_queues_app.git
     app_path: /opt/multiple_queues_app
+    venv_path: /opt/multiple_queues_app/.venv
     celery_workers:
       - name: fibonacci
   tasks:
+    - name: Include app role
+      import_tasks: roles/app/tasks/main.yml
+      async: 7200
+      poll: 0
+      register: app_role_task
+      tags:
+        - web_app
+
     - name: Include redis role
       import_tasks: roles/redis/tasks/main.yml
       async: 7200

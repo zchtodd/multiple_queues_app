@@ -1,0 +1,18 @@
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn-run-dir.service
+After=gunicorn-run-dir.service network.target
+
+[Service]
+Environment="REDIS_HOST=localhost"
+Environment="REDIS_PASSWORD={{ redis_password }}"
+Environment="REDIS_PORT=6379"
+Environment="REDIS_DB=0"
+Environment="PYTHONUNBUFFERED=1"
+User=root
+Group=root
+WorkingDirectory={{ app_path }}
+ExecStart={{ venv_path }}/bin/gunicorn --config {{ app_path }}/gunicorn.conf.py
+
+[Install]
+WantedBy=multi-user.target

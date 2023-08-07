@@ -1,0 +1,13 @@
+[Unit]
+Description=Create /run directory for Gunicorn
+Requires=local-fs.target
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/mkdir -m 0755 -p /run/gunicorn
+ExecStart=/bin/chown root:root /run/gunicorn
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
