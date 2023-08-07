@@ -1,5 +1,16 @@
 version: '3.8'
 
+x-worker-opts: &worker-opts
+  build:
+    context: .
+    dockerfile: Dockerfile
+  volumes:
+    - ${PWD}:/usr/src/app
+  environment:
+    - CELERY_BROKER_URL=redis://redis:6379/0
+  depends_on:
+    - redis
+
 services:
   web:
     build:
@@ -16,18 +27,13 @@ services:
     depends_on:
       - redis
 
-  celery:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: celery_worker
-    command: watchmedo auto-restart --directory=multiple_queues_app --pattern=*.py --recursive -- celery -A myapp worker --loglevel=info
-    volumes:
-      - ${PWD}:/usr/src/app
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0
-    depends_on:
-      - redis
+  fibonacci-worker:
+    command: tools/start_celery.sh -Q fibonacci --concurrency=1
+    <<: *worker-opts
+
+  prime-worker:
+    command: tools/start_celery.sh -Q prime --concurrency=1
+    <<: *worker-opts
 
   redis:
     image: redis:latest
