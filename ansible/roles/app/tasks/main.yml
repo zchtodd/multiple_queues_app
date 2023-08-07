@@ -30,13 +30,6 @@
     virtualenv_command: python3 -m venv
     requirements: "requirements.txt"
 
-- name: Run Django migrations
-  ansible.builtin.command:
-    cmd: "{{ venv_path }}/bin/python manage.py migrate"
-    chdir: "{{ app_path }}"
-  environment:
-    DJANGO_SETTINGS_MODULE: "myapp.settings"
-
 - name: Create Gunicorn configuration file
   ansible.builtin.template:
     src: "{{ playbook_dir }}/roles/app/templates/gunicorn.conf.py.j2"
@@ -81,3 +74,10 @@
   ansible.builtin.systemd:
     name: gunicorn
     state: restarted
+
+- name: Run Django migrations
+  ansible.builtin.command:
+    cmd: "{{ venv_path }}/bin/python manage.py migrate"
+    chdir: "{{ app_path }}"
+  environment:
+    DJANGO_SETTINGS_MODULE: "myapp.settings"

@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CELERY_BROKER_URL = os.environ["CELERY_BROKER_URL"]
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
 CELERY_IMPORTS = ("multiple_queues_app.tasks", )
 
 # Application definition
