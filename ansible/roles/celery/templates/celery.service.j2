@@ -9,7 +9,7 @@ Type=simple
 User=root
 Group=root
 WorkingDirectory={{ app_path }}
-ExecStart={{ app_path }}/.venv/bin/celery -A multiple_queues_app worker -Q {{ item.name }} --loglevel=info
+ExecStart={{ app_path }}/.venv/bin/celery -A myapp worker -Q {{ item.name }} --loglevel=info
 Restart=always
 RestartSec=10
 StandardOutput=syslog
